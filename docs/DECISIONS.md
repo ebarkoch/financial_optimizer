@@ -28,6 +28,7 @@ Created October 4, 2026. "Confirmed" means explicitly requested by the owner;
 | D06 | Include probability of outperforming and break-even return | Required outputs |
 | D07 | Add Monte Carlo and confidence intervals in a later stage | Requested future uncertainty features |
 | D08 | Separate the engine from the UI and expose calculations | Transparent and auditable behavior |
+| D09 | Keep a concise status document for handoffs between sessions | Owner approved adding shared session context |
 
 ## Proposed defaults for review
 
@@ -67,9 +68,9 @@ Resolve those affecting the first model before coding its dependent behavior.
 ## Planned checkpoints
 
 1. Owner reviews these documents; update and approve the assumptions.
-2. Connect the local folder to the empty GitHub repository and decide the initial
-   source-control workflow when authorized. A commit is a saved local snapshot;
-   a push publishes those snapshots to GitHub. Neither has happened in this task.
+2. Completed: connect the local folder to GitHub and publish the initial snapshot
+   on `main` (`8fbb33e`). A commit is a saved local snapshot; a push publishes those
+   snapshots to GitHub. Later commits and pushes still require authorization.
 3. Choose a stack and implement the independent deterministic engine with tests
    derived from the model's examples and invariants.
 4. Add a minimal input/results UI and verify complete example workflows.
@@ -89,3 +90,11 @@ five existing documents and connected `origin` to the GitHub repository on `main
 The initial snapshot includes those documents and `.gitignore`. This source-control
 authorization does not approve the proposed financial assumptions or authorize
 application implementation; the documentation-review checkpoint remains in place.
+
+## Session handoff context — October 4, 2026
+
+The owner approved adding `docs/STATUS.md` after discussing how to move between
+Codex and Work sessions. It records the current stage, completed work, verification,
+blockers, and the next step. `AGENTS.md` and `README.md` point to it. Keep status
+current while preserving decisions and their reasoning in this log. Product and
+financial-model proposals remain awaiting review; implementation is not authorized.

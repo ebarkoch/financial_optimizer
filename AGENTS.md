@@ -15,6 +15,7 @@ part of this initial stage.
 
 ## Sources of project context
 
+- `docs/STATUS.md`: current stage, completed work, verification, blockers, and next step.
 - `docs/PRODUCT_SPEC.md`: user needs, scope, workflow, and acceptance criteria.
 - `docs/FINANCIAL_MODEL.md`: assumptions, formulas, examples, and model limitations.
 - `docs/DECISIONS.md`: confirmed requirements, proposed decisions, and open questions.
@@ -52,6 +53,19 @@ log and keep the specification and model consistent.
   Preserve unrelated user changes and inspect the working tree before editing.
 
 ## Review and handoff
+
+At the start of a new session, read `docs/STATUS.md` and check the current branch
+and working tree before continuing. Confirm that the session can access the
+intended folder or repository; do not assume another chat's history is available.
+Read the other context documents as needed for the task.
+
+Before a session handoff or after a meaningful milestone, update `docs/STATUS.md`
+with completed work, work in progress, verification results, blockers, and the next
+step. Keep it a concise current snapshot. Record decisions and their reasoning in
+`docs/DECISIONS.md`, and update specifications when requirements or formulas change.
+Distinguish proposed work from approved work and local changes from published ones.
+Check Git for the current commit and synchronization state rather than relying on
+an old status entry. Commit and push only when authorized by the owner.
 
 For financial changes, update the relevant formulas, worked examples, limitations,
 and decisions together. Report verification honestly: documentation checks are

@@ -9,11 +9,15 @@ or runnable commands exist yet.
 
 ## Start here
 
-1. Read [Product specification](docs/PRODUCT_SPEC.md) for scope and the intended workflow.
-2. Read [Financial model](docs/FINANCIAL_MODEL.md) for assumptions, formulas, and worked examples.
-3. Review [Decisions and open questions](docs/DECISIONS.md) before authorizing implementation.
+1. Read [Current status and session handoff](docs/STATUS.md) to see where work stands.
+2. Read [Product specification](docs/PRODUCT_SPEC.md) for scope and the intended workflow.
+3. Read [Financial model](docs/FINANCIAL_MODEL.md) for assumptions, formulas, and worked examples.
+4. Review [Decisions and open questions](docs/DECISIONS.md) before authorizing implementation.
 
 [AGENTS.md](AGENTS.md) gives future development agents the project rules.
+When switching sessions, give the next session access to the latest repository
+files and ask it to read these instructions and the status document. Update status
+and decisions before handing off; commit and push updates when authorized.
 
 The proposed first version handles multiple holdings, partial sales, multiple
 replacement investments, long-term gains assumptions, and bear/base/bull comparisons.
