@@ -1,0 +1,17 @@
+# macOS Finder metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# AppleDouble resource-fork files
+._*
+
+# macOS volume and filesystem metadata
+.Spotlight-V100/
+.Trashes/
+.fseventsd/
+.TemporaryItems/
+.DocumentRevisions-V100/
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.apdisk
