@@ -1,5 +1,76 @@
 # Decisions and review log
 
+Current scope updated October 10, 2026. The current section below supersedes
+conflicting October 4 proposals; the original record is preserved afterward.
+
+## Current confirmed choices — October 10
+
+| ID | Decision | Supersedes / reason |
+| --- | --- | --- |
+| D10 | Build toward Basic first; keep Advanced for later | Simpler, usable trade comparison before optimization |
+| D11 | Basic uses dollars and percentages, no shares or prices | Explicit owner preference |
+| D12 | Each sell uses ticker, amount to sell, and Net gain/loss ($) | Replaces required whole-position basis and sale-fraction inputs |
+| D13 | Gain/loss applies to the exact amount being sold | Avoid whole-holding gain on a partial sale |
+| D14 | Buys accept dollars or percentages of after-tax cash | Supports arbitrary multiple destinations |
+| D15 | Two manual rates: federal and state/local | Replaces combined-rate input; calculation sums components |
+| D16 | Long-term default; simple expected annual returns and years | Detailed tax profiles and holding periods deferred |
+| D17 | Any stock identifier; no full portfolio import required | Focus on the contemplated trade |
+| D18 | Lead with break-even and after-tax hold-versus-switch values | Retains central decision question |
+| D19 | One responsive web app for desktop and mobile | No separate native application required |
+| D20 | Shares, stock data/manual price overrides, targets and imports in Advanced | Earlier interest retained, excluded from Basic |
+| D21 | Defer scenarios, probabilities, simulations, and automated allocation search | Supersedes D05/D06 scenario/probability requirements for initial release |
+| D22 | Update the Codex documentation to reflect these decisions | October 10 request; documentation-only task |
+
+Core earlier principles remain: simple interface, multiple sells/buys, independent
+auditable engine, and concise session handoffs. Federal/state component rates are
+now Basic, not deferred tax detail.
+
+## Documented implementation defaults
+
+These are concrete defaults to make the financial specification reviewable, not
+additional claims of explicit owner approval of every edge case:
+
+- Compare entered sale slices, with no required untouched holdings.
+- Reserve tax from proceeds and compare after hypothetical final liquidation.
+- Treat entered rates as constant all-in assumptions for their components.
+- Use a horizon greater than one year, price appreciation only, and 0% cash return.
+- Permit unallocated cash rather than requiring a 100% invested allocation.
+- Net same-batch gains/losses; no negative tax, loss carryforward, or refund.
+- Do not model declared disallowed losses or wash-sale cases in Basic.
+- Gain is independently entered: reconfirm it after a sale-amount edit.
+- Fixed-dollar buys stay fixed; percentage buys respond to changed available cash.
+- Share expected returns across rows referring to the same asset.
+
+These replace P01/P05/P09/P10/P11 where inconsistent. P02/P03/P04/P06/P07/P08
+remain simplified modeling conventions as restated above, not a full tax engine.
+P12's engine/UI separation and deterministic-first sequencing remain.
+
+## Implementation and publication status
+
+The owner requested updating the existing handoff files. The October 10 task updates
+six documents together in the GitHub repository. No implementation, stack selection,
+external quote connection, or deployment is part of this request.
+The Mac checkout must be checked/synchronized separately; this session cannot
+assert its working-tree state.
+
+The prior plan discussed an independent Python engine, possibly an early Streamlit
+UI and later React/FastAPI. These are not installed or final architectural choices.
+The latest requirement is a responsive web interface. Do not add a database or
+service merely because it appeared in an earlier architectural suggestion.
+
+Next authorized development should implement the deterministic Basic engine and
+responsive UI, with any material changes to these conventions stated explicitly.
+Do not make advanced-feature decisions prerequisites for Basic.
+
+## Historical record — October 4 (superseded where noted above)
+
+The following is retained verbatim for provenance. Its statements of current stage,
+open questions, or first-version requirements describe October 4, not today's scope.
+
+---
+
+# Decisions and review log
+
 Created October 4, 2026. "Confirmed" means explicitly requested by the owner;
 "Proposed" means a draft choice awaiting review. Do not treat a proposal as approval.
 
@@ -98,3 +169,4 @@ Codex and Work sessions. It records the current stage, completed work, verificat
 blockers, and the next step. `AGENTS.md` and `README.md` point to it. Keep status
 current while preserving decisions and their reasoning in this log. Product and
 financial-model proposals remain awaiting review; implementation is not authorized.
+

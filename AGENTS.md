@@ -2,73 +2,72 @@
 
 ## Project and current stage
 
-Portfolio Optimizer helps a user compare holding existing investments with selling
-some holdings and reallocating the proceeds, accounting for taxes and uncertain
-future returns. The owner is new to software development: explain unfamiliar
-terms, decisions, verification results, and the next review step in plain language.
+Build toward a simple tax-aware "Hold or switch?" comparison. The owner is new to
+software development: use plain language and avoid unnecessary follow-up questions.
+The October 10, 2026 scope supersedes the original scenario-first v1 proposal.
 
-The project is at the documentation-review stage. The initial task authorizes
-these context documents only. Stop before application implementation; wait for
-the owner to review the product and financial model and authorize the next stage.
-Do not select a technology stack, install dependencies, or create scaffolding as
-part of this initial stage.
+This task authorizes a documentation update, not application implementation,
+dependency installation, scaffolding, or deployment. The next implementation task
+should follow the current Basic scope rather than reopen decisions already made.
+No stack is established in this repository. An independent Python engine was
+discussed previously; it is a direction, not an installed implementation.
 
-## Sources of project context
+## Read first
 
-- `docs/STATUS.md`: current stage, completed work, verification, blockers, and next step.
-- `docs/PRODUCT_SPEC.md`: user needs, scope, workflow, and acceptance criteria.
-- `docs/FINANCIAL_MODEL.md`: assumptions, formulas, examples, and model limitations.
-- `docs/DECISIONS.md`: confirmed requirements, proposed decisions, and open questions.
-- `README.md`: starting point and current project status.
+- `docs/STATUS.md`: current stage and next step.
+- `docs/PRODUCT_SPEC.md`: interface, scope, and acceptance criteria.
+- `docs/FINANCIAL_MODEL.md`: calculation contract and worked examples.
+- `docs/DECISIONS.md`: confirmed choices, defaults, and superseded history.
+- `README.md`: overview.
 
-Read these before making related changes. Explicit owner instructions take
-precedence. If the documents conflict, explain and resolve the conflict rather
-than silently inventing a financial rule. Record approved changes in the decision
-log and keep the specification and model consistent.
+Explicit owner instructions take precedence. Keep all affected documents consistent.
+Do not interpret old entries in the decision history as current requirements.
 
-## Development rules for later authorized work
+## Basic scope guardrails
 
-- Keep the calculation engine independent of the UI, framework, network, and
-  storage. Give it explicit inputs and return structured results and an audit trail.
-- Put financial formulas in the engine; the UI collects inputs and presents results.
-- Prefer small, reviewable increments. Explain the intended outcome before a
-  meaningful change and summarize what changed and how it was checked afterward.
-- Do not add automatic recommendations, trade execution, or hidden assumptions.
-- Keep assumptions editable and visible. Label examples as synthetic; never
-  present an illustrative tax rate or return as a personalized estimate.
-- Preserve multiple positions, partial sales, multiple destinations, and unchanged
-  holdings in the data model. Use stable IDs rather than tickers as record identities.
-- Keep scenario probabilities distinct from simulation probabilities. Never infer
-  either from the names bear, base, and bull or fabricate a confidence interval.
-- Use precise numeric handling and documented tolerances. Round for display only;
-  do not round intermediate financial calculations or silently clamp invalid inputs.
-- Include model version and assumptions in results. Later simulations must also
-  include their seed, distributions, correlations, and trial count.
-- Test meaningful financial behavior: worked examples, conservation of proceeds,
-  basis tracking, tax netting, partial sales, identical portfolios, zero tax,
-  negative returns, break-even residuals, and scenario probability semantics.
-- Keep real portfolio data, account details, credentials, and local exports out of
-  source control. This GitHub repository is public. Use synthetic fixtures.
-- Do not commit, push, publish, deploy, or add external services unless requested.
-  Preserve unrelated user changes and inspect the working tree before editing.
+- Basic inputs use dollars and percentages only, plus ticker identifiers and years.
+- Sell fields: ticker, amount to sell ($), **Net gain/loss ($)** for that exact sale.
+- Do not ask for both net gain and cost basis. Infer basis as sale amount minus gain.
+- Changing a sale amount does not justify silently scaling the entered gain.
+  Preserve it and request reconfirmation before treating results as final.
+- Buy fields: ticker, dollars or percentage of available after-tax proceeds.
+- Separate editable federal and state/local rates. No automatic tax profile or
+  bracket calculation in Basic. Long-term is an explicit assumption.
+- No mandatory shares, stock prices, total holdings, purchase dates, or broker imports.
+- Expected annual returns are user assumptions, not fetched analyst forecasts.
+- No bear/base/bull grid, probability, confidence interval, or optimizer in Basic.
+- Support arbitrary tickers without requiring a quote-provider match.
+- Use one responsive web interface; Basic/Advanced is independent of screen size.
 
-## Review and handoff
+## Development rules for subsequent implementation
 
-At the start of a new session, read `docs/STATUS.md` and check the current branch
-and working tree before continuing. Confirm that the session can access the
-intended folder or repository; do not assume another chat's history is available.
-Read the other context documents as needed for the task.
+- Separate financial calculations from UI, storage, framework, and network.
+  Use explicit inputs, structured results, model version, and an audit trail.
+- Use stable row IDs and canonical asset IDs; ticker is not a row ID. Shared
+  assets use the same return assumption in both strategies.
+- Compare the entered sale slice. Do not claim a whole-portfolio tax estimate or
+  fabricate unseen holdings. Advanced can model retained positions and tax lots.
+- Follow the documented aggregate gain/loss netting, new purchase basis, cash,
+  and final-liquidation rules. Never double-subtract immediate taxes.
+- Keep assumptions visible but compact. Use synthetic examples. Tax and return
+  defaults must not masquerade as personalized estimates.
+- No automatic recommendations, trade execution, undisclosed normalization,
+  or hidden changes to user-entered dollar trades.
+- Choose precise numerical handling and documented tolerances; reject invalid
+  or nonfinite inputs. Round presentation, not intermediate calculations.
+- Test meaningful financial behavior: examples, conservation, tax components,
+  loss netting, zero taxes, negative returns, mixed allocation units, cash,
+  break-even substitution, and changed sale/gain consistency.
+- In later simulations, distinguish outcome percentiles from confidence intervals;
+  record seed, distributions, correlations, trial count, and model version.
+- Keep credentials, real holdings, personal tax data, and local exports out of this
+  public repository. Preserve unrelated files and inspect changes before writing.
+- Commit, push, publish, deploy, or add external services only when requested.
+  Owner authorization for this documentation update does not authorize deployment.
 
-Before a session handoff or after a meaningful milestone, update `docs/STATUS.md`
-with completed work, work in progress, verification results, blockers, and the next
-step. Keep it a concise current snapshot. Record decisions and their reasoning in
-`docs/DECISIONS.md`, and update specifications when requirements or formulas change.
-Distinguish proposed work from approved work and local changes from published ones.
-Check Git for the current commit and synchronization state rather than relying on
-an old status entry. Commit and push only when authorized by the owner.
+## Handoff
 
-For financial changes, update the relevant formulas, worked examples, limitations,
-and decisions together. Report verification honestly: documentation checks are
-not application tests, and a scenario model is not an empirical market forecast.
-Surface unresolved choices that materially affect the answer before implementing
-dependent behavior.
+Start each session by reading status and checking the actual repository and working
+tree. Do not assume the Mac checkout reflects a GitHub edit. Before finishing,
+update status with completed work, verification, limitations, and next step; append
+decisions with their reasons. Document-only checks are not application tests.

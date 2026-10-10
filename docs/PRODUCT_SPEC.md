@@ -1,132 +1,105 @@
 # Product specification
 
-Status: draft for owner review. Created October 4, 2026. No application has been
-implemented. Confirmed requirements and proposed defaults are distinguished in
-`DECISIONS.md`.
+Updated October 10, 2026. Current target: **Basic trade comparison**.
+The owner simplified the earlier full-portfolio, scenario-first proposal.
+No application code has been implemented in this repository.
 
-## Purpose
+## Core question
 
-Help an investor answer: "Under my assumptions, does selling some current
-investments and buying alternatives leave me with more money after taxes than
-holding, and how sensitive is that answer to future returns?"
+"Would selling these investments and buying alternatives leave me better off
+after taxes, and how much extra return would justify switching?"
 
-The product is a decision-support calculator. It explains outcomes and tradeoffs;
-it does not place trades or claim to know the best future investment.
+## Basic workflow
 
-## Confirmed requirements
+1. Add one or more sell rows.
+   - Ticker: arbitrary stock/ETF identifier; no quote lookup required.
+   - **Amount to sell ($)**: proceeds from the shares under consideration.
+   - **Net gain/loss ($)**: signed gain or loss included in that sale amount.
+     Hint: "For the shares you're selling." Positive is a gain; negative is a loss.
+   - Do not request the whole holding or original cost as additional fields.
+2. Add one or more buy rows.
+   - Ticker and amount, with a Dollars / % of available cash selector.
+   - Percentages refer to total after-tax proceeds, not remaining cash in row order.
+   - Show unallocated cash; offer "Use all available cash" as an explicit action.
+   - Allow a cash remainder; do not silently scale purchases to fit.
+3. Enter years and one expected annual return (%) per unique asset.
+   - Same ticker shares a return assumption across sell and buy rows.
+   - No scenarios or price targets on the Basic screen.
+4. Enter **Federal tax rate (%)** and **State/local tax rate (%)**.
+   - Add the two for the simplified model; show components separately.
+   - Long-term sales assumed. Explain that any applicable federal surcharge must
+     already be included in the entered federal assumption; no automatic add-on.
+   - State/local is an all-in assumption for that component, not a tax lookup.
+   - Require both entries or explicit zero; save assumptions locally when implemented.
+5. Review taxes now, available cash, break-even return, and hold-versus-switch outcomes.
 
-- A simple, intuitive interface supporting multiple existing positions, multiple
-  proposed sales, and multiple replacement investments.
-- Long-term capital gains as the default in v1, with detailed tax assumptions later.
-- A fair after-tax comparison of holding and proposed reallocations.
-- Bear, base, and bull return assumptions.
-- Probability of reallocation outperforming holding, with Monte Carlo simulation
-  and confidence intervals eventually supported.
-- Break-even future return required to overcome the cost of selling.
-- A financial engine separate from the UI, with transparent, auditable calculations.
+Changing a sell amount after entering a gain marks that gain "Confirm for updated
+sale amount." Do not assume proportional lots or silently recalculate it.
+Changing a gain or tax rate changes available cash; percentage buys update, fixed
+dollar buys stay fixed. Show and block overfunded results until the user adjusts.
 
-## Proposed v1 scope
+## Results and labels
 
-Use one taxable portfolio in USD, with manually entered values and assumptions.
-The US tax context is a proposal to review, not a confirmed fact about the owner.
-Use one user-entered combined long-term gains tax rate; do not determine rates from
-income, filing status, or tax brackets. Require a rate or explicit confirmation of
-0%; do not silently default to a potentially incorrect percentage.
+- Immediate federal tax, state/local tax, and total estimated tax.
+- Sale proceeds, available to invest, allocated funds, and cash remainder.
+- Headline: required annual return on the new investment basket to break even.
+- When useful, show extra annual percentage points versus the holding basket's
+  equivalent annual return; do not call a percentage-point difference "percent".
+- After-tax ending value: Hold, Switch, and switching advantage/disadvantage.
+- Show dollar and percentage advantage; percentage is unavailable when Hold is zero.
+- Detailed arithmetic and assumptions are expandable.
 
-Compare the entire entered portfolio against one user-defined proposal at a time.
-Each proposal can sell any fraction of several holdings and allocate all net
-proceeds across several destinations. Existing shares that are not sold remain in
-the comparison. Later versions can save and compare several alternative proposals.
+The primary comparison assumes liquidation of both strategies at the same horizon.
+The entered sale slice funds both strategies; unchanged holdings are not required.
+Do not label it a whole-portfolio projection. Outside holdings can change loss
+offsets and actual taxes, so cancellation of their tax effect is not assumed.
+Results are conditional on assumptions, not trade recommendations.
 
-Use a common horizon greater than one year so newly bought assets can also fit the
-long-term assumption. Project annual price appreciation, excluding dividends and
-interest, with no interim trading or rebalancing. This first model fits growth
-assets; income-producing investments need a later cash-flow model. ETFs can be
-modeled only with this distribution limitation made visible.
+## Responsive interface
 
-The main result is estimated spendable value after hypothetical liquidation of
-both portfolios at the horizon. Also show their values before that final tax and
-show the proposal's immediate tax separately. Liquidation is a comparison
-convention, not an instruction to sell at that date.
+One responsive web app and one calculation engine for desktop and mobile.
+Desktop: inputs on the left, results on the right.
+Mobile: stacked trade cards with readable labels and accessible numeric inputs;
+a compact result summary may link to complete results without covering controls.
+Basic/Advanced is a feature choice on either device, not separate applications.
+No native iOS application or PWA installation is required for the first release.
 
-## Simple user workflow
+## Basic model conventions
 
-1. Enter current holdings: name or ticker, current total market value, and adjusted
-   total cost basis (the amount used to calculate a taxable gain). Each entry
-   represents a homogeneous holding or lot; distinct lots can have the same ticker.
-2. Choose how much of each entry to sell, from 0% to 100%. Explain that partial
-   sales use that entry's proportional basis rather than selecting tax lots.
-3. Add replacement investments and allocation percentages totaling 100% of the
-   proceeds remaining after the estimated sale tax.
-4. Enter the horizon, the combined gains rate, and annual bear/base/bull returns
-   for every asset that appears in either portfolio. Share the same return
-   assumption for the same asset in both portfolios.
-5. Review a comparison table with holding, proposal, and dollar/percentage
-   difference for each scenario. Show immediate tax, net investable proceeds,
-   final tax estimates, and the break-even replacement return.
-6. Optionally assign probabilities to the three scenarios. Show a weighted
-   probability of outperforming only when valid probabilities are provided.
-   Without them, show "Probability not estimated" and which scenarios win.
-7. Expand "How this was calculated" to inspect position-level values, basis,
-   realized gains and losses, portfolio tax totals, formulas, and assumptions.
+See FINANCIAL_MODEL.md for exact formulas. Defaults for implementation:
+USD; taxes paid from sale proceeds; constant entered rates now and at liquidation;
+horizon greater than one year; price appreciation only; 0% cash return; no fees,
+distributions, external funding, or interim trading; same-batch netting with no tax
+refund or value for unused losses. These defaults are documented design choices,
+not a claim that the owner approved every edge-case tax treatment.
+If a declared wash-sale/disallowed-loss situation applies, Basic does not model it.
+No exhaustive tax questionnaire belongs on the main screen.
 
-The first screen should explain the question being answered and use understandable
-labels. Keep the primary inputs and results prominent; place detailed calculation
-tables and limitations in an expandable section. Keep essential assumptions such
-as omitted dividend taxes and the loss policy visible near the results.
+## Advanced / later, not required for Basic
 
-## Result semantics
+- Shares and position-level cost basis; brokerage CSV imports and individual tax lots.
+- Live/latest available quotes with source and timestamp, arbitrary manual prices,
+  locked overrides, and future price targets converted to returns.
+- Detailed federal/state/local estimates using income, filing status, jurisdiction,
+  holding periods, NIIT, brackets, carryforwards, and current/future tax rates.
+- Whole-portfolio holdings and retained positions, distributions and cash-flow models.
+- Bear/base/bull sensitivity comparisons, then paired correlated simulations,
+  outcome ranges, calibrated probabilities, and allocation/tax-lot optimization.
+- Saved comparisons, syncing between devices, and optional PWA installation.
 
-- A positive difference means the proposal has a higher after-tax terminal value
-  under that scenario, not that the app recommends the trade.
-- Percentage advantage is the difference divided by holding's after-tax value;
-  when holding's value is zero, show the percentage as unavailable.
-- Break-even is an equivalent annual return for the replacement basket, with the
-  horizon, original holdings' scenario returns, and taxes held fixed. It is not a
-  forecast or an allocation recommendation.
-- Scenario probability is conditional on user-assigned weights over three
-  possible joint outcomes. Equal weights are not an automatic default.
-- A weighted average value, if shown, is a weighted average of after-tax scenario
-  results; do not calculate it by averaging returns first.
+The owner still wants these capabilities eventually; deferral is not removal.
+Never display fabricated probabilities or imply three scenarios are confidence intervals.
 
-## Later stages
+## Acceptance criteria
 
-After review, implement and verify the deterministic engine before the UI. Add
-scenario weights with the initial calculator. Add Monte Carlo in a later stage:
-joint return distributions, correlations, reproducible trials, outcome percentiles,
-probability of outperforming, and an interval measuring simulation-estimate
-uncertainty. The underlying input assumptions remain visible.
-
-Later tax detail can include tax lots, short-term rates, federal/state components,
-NIIT, bracket effects, loss carryforwards, wash-sale rules, tax-payment timing,
-and distinct current/future rates. Later investment detail can include distributions,
-fees, contributions, withdrawals, cash, and rebalancing. Decide the stack and storage
-approach only after the model is reviewed.
-
-## Outside v1
-
-Brokerage connections, live quotes, automatic trade execution, automated portfolio
-search, tax-return preparation, retirement accounts, leverage, options, multi-currency
-portfolios, and claims that scenarios or simulations predict actual market odds.
-
-## Acceptance criteria for later implementation
-
-- Two or more holdings can be partially or fully sold into two or more destinations;
-  unselected holdings remain, and the same initial portfolio funds both strategies.
-- Tax is reserved from sale proceeds, replacement basis equals new purchase cost,
-  and both strategies use the same horizon and final-liquidation convention.
-- All three scenarios show auditable after-tax comparisons and break-even results.
-- Probabilities are optional, explicitly labeled, and never inferred from scenario
-  labels. Missing or invalid weights cannot produce an outperformance percentage.
-- Inputs are validated with useful messages; errors never produce plausible-looking
-  results. Follow the domains and unsupported-case rules in `FINANCIAL_MODEL.md`.
-- The engine can run and be tested without a browser. Its results reproduce the
-  documented examples and expose every relevant assumption.
-- Monte Carlo and confidence intervals are identified as future functionality;
-  v1 does not display fabricated simulation outputs.
-
-## Owner review
-
-Review the proposed tax jurisdiction, liquidation convention, price-only returns,
-loss policy, and scope of the first probability estimate before authorizing code.
-The outstanding choices are collected in `DECISIONS.md`.
+- A one-sell/one-buy comparison needs no shares, prices, whole holdings, or import.
+- Multiple arbitrary sell/buy rows work; duplicate assets share assumptions.
+- Negative gains are accepted, and net sale gain is taxed once at each entered rate.
+- Dollars and percentage purchases can coexist with an explicit cash remainder.
+- Changing a fixed dollar input does not silently change another fixed dollar input.
+- Federal and state/local estimates sum to total tax.
+- Both final values include the same hypothetical liquidation convention.
+- Break-even residual and funding conservation pass the model's checks.
+- Invalid or unreconfirmed inputs never yield an apparently finalized result.
+- All Basic actions remain usable on phone and desktop.
+- No Advanced-only feature is needed to run the Basic calculation.

@@ -1,67 +1,71 @@
 # Current status and session handoff
 
-Last updated: October 4, 2026.
+Last updated: October 10, 2026.
 
 ## Current stage
 
-Product and financial-model review. No application code, selected technology stack,
-installed dependencies, or runnable application exists. The owner has authorized
-project documentation and source-control setup, but has not approved the proposed
-financial assumptions or authorized application implementation.
+Basic scope selected and documentation updated. No application code, installed
+dependencies, selected stack, or runnable application is present in the inspected
+GitHub repository. Today's request is documentation-only, not implementation.
 
-## Completed
+## Current requirements
 
-- Inspected the initially empty local folder and GitHub repository.
-- Created `AGENTS.md`, `README.md`, and the product specification, financial model,
-  and decision log in `docs/`.
-- Cloned the repository into the local folder while preserving the documents.
-- Added a macOS `.gitignore`.
-- Published initial commit `8fbb33e` on `main`: "Initial project documentation and
-  macOS gitignore".
-- Added this handoff document and references from the project instructions and README.
+- Dollar/percentage-only Basic interface; arbitrary tickers, multiple sells/buys.
+- Sell: ticker, amount to sell ($), **Net gain/loss ($)** for that sale.
+- Buy: ticker, dollars or percent of available after-tax cash.
+- Years and one expected annual return per asset.
+- Separate federal and state/local tax rates; long-term assumption.
+- Immediate tax components, cash available, break-even return, and after-tax
+  hold-versus-switch values.
+- Responsive mobile/desktop web app; independent calculation engine.
+- Shares, prices, data imports, detailed taxes, scenarios, simulations, and automatic
+  optimization are later Advanced capabilities, not Basic dependencies.
 
-## Work in progress and publication state
+## Completed this update
 
-The owner authorized committing and pushing the handoff-document update to `main`.
-This snapshot includes `docs/STATUS.md` and updates to `AGENTS.md`, `README.md`, and
-`docs/DECISIONS.md`. Check Git for the current commit, working tree, and synchronization
-with `origin/main` rather than treating this document as a live Git status report.
-No implementation work is in progress; the next task is product and model review.
+- Read existing GitHub documents and verified they do exist, correcting the prior
+  chat uncertainty about whether they had been created.
+- Updated README, AGENTS, PRODUCT_SPEC, FINANCIAL_MODEL, DECISIONS, and this status.
+- Preserved the October 4 decision record as explicitly historical.
+- Specified inferred basis, two tax components, mixed buy units, cash remainder,
+  and consistent hypothetical final liquidation.
+- Added numerical examples and edge cases for future engine tests.
+- Chat mockups exist as design explorations only; the repository has no app.
 
 ## Verification
 
-- The initial documentation's worked-example arithmetic was checked, including
-  partial-sale proceeds conservation, allocations, and break-even equality.
-- The macOS ignore rules were checked without hiding the project documents.
-- The initial push succeeded, and the local tree was clean afterward.
-- These are documentation and repository checks; no application test suite exists.
+- Recomputed the $20,000 sale / $10,000 gain example, separate tax components,
+  5-year Hold/Switch outcomes, and break-even substitution.
+- Checked multi-sale loss netting and mixed-allocation cash conservation.
+- Reviewed cross-document consistency against the October 10 Basic scope.
+- These are documentation/math checks, not application or browser tests.
 
-## Review needed and blockers
+## Repository and local state
 
-No technical blocker is currently known. The next development stage requires owner
-review of the proposals in `DECISIONS.md`, especially the US/USD tax context,
-final-liquidation comparison, price-only returns, proportional basis, simplified
-loss treatment, and user-weighted scenario probability before Monte Carlo.
+This documentation update is applied to GitHub on main. Inspect Git for the exact
+current commit; do not use this file as a live branch-state report.
+The known Mac folder is /Users/eyal/Desktop/financial_optimizer, but this session
+has not accessed or synchronized it. Preserve any local changes before pulling.
 
 ## Next step
 
-Review `PRODUCT_SPEC.md` and `FINANCIAL_MODEL.md` with the owner. Record approved
-choices in `DECISIONS.md` and update the affected specifications. Wait for explicit
-implementation authorization before choosing a stack or writing application code.
+When the owner requests implementation, read the current specifications and build
+the deterministic Basic engine with meaningful tests, then the responsive interface.
+No market-data service, broker import, tax-profile wizard, scenario simulation, or
+optimizer is necessary to deliver that version. Keep model defaults visible;
+do not treat simplified taxes as a comprehensive tax estimate.
+Technical stack choice is still open; reuse an established stack if one is added
+before the next session instead of rebuilding it.
 
-## Starting the next session
+Suggested Codex opening prompt:
 
-Provide access to `/Users/eyal/Desktop/financial_optimizer` or the latest files in
-[ebarkoch/financial_optimizer](https://github.com/ebarkoch/financial_optimizer).
-An uploaded copy is a snapshot; replace it when the repository documents change.
+> Read AGENTS.md and docs/STATUS.md, then the current product specification,
+> financial model, and latest decisions. Check the working tree and synchronize
+> with the updated GitHub documents without discarding local changes. Implement
+> the Basic version described there: dollars/percentages, multiple sells/buys,
+> Net gain/loss, separate federal and state/local rates, and responsive results.
+> Keep the financial engine separate, verify the worked examples, and defer
+> Advanced features. Update status and setup instructions as work is completed.
 
-Suggested opening prompt:
-
-> Read and follow AGENTS.md, then read docs/STATUS.md. Check the current branch,
-> commit, and working tree if Git is available. Review the product specification,
-> financial model, and decisions relevant to this task. Summarize the current stage,
-> unresolved choices, and next step before proceeding. Product and financial logic
-> are still awaiting review; application implementation has not been authorized.
-
-Before handing off again, refresh this snapshot and record any decisions in the
-decision log. Update publication state after an authorized commit or push.
+That prompt is for the next implementation request; this documentation task does
+not execute it.

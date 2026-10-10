@@ -1,37 +1,46 @@
 # Portfolio Optimizer
 
-A planned app for comparing holding current investments with selling and
-reallocating them, accounting for capital-gains taxes and uncertain future returns.
-Calculations will be transparent and independent of the interface.
+Answer: **Would selling these investments and buying others leave me better off after taxes?**
 
-**Status:** documentation draft for review. No application, installation steps,
-or runnable commands exist yet.
+## Current status
+
+Updated October 10, 2026. The owner selected a simpler Basic interface and requested
+this documentation update. The repository is documentation-only: no application,
+selected stack, dependencies, or runnable commands exist yet. Interactive chat
+mockups are design references, not an implemented or validated application.
+This task updates the handoff; it does not implement or deploy the app.
+
+## Basic version
+
+- Sell one or more arbitrary stocks: ticker, amount to sell ($), and **Net gain/loss ($)**.
+- Buy one or more stocks: amount in dollars or percentage of available after-tax cash.
+- Set an investment horizon and expected annual return for each stock.
+- Enter two tax assumptions: **Federal tax rate (%)** and **State/local tax rate (%)**.
+- Assume long-term sales; show separate tax components and their combined effect.
+- Compare immediate taxes, investable cash, break-even return, and after-tax ending values.
+- Use one responsive web interface for mobile and desktop.
+
+No full-portfolio import is required. Basic uses dollars and percentages only;
+shares, quotes, manual stock prices, future price targets, imports, tax profiles,
+bear/base/bull scenarios, probability simulations, and automatic optimization belong
+to later stages. A ticker is an identifier, not a dependency on a market-data service.
 
 ## Start here
 
-1. Read [Current status and session handoff](docs/STATUS.md) to see where work stands.
-2. Read [Product specification](docs/PRODUCT_SPEC.md) for scope and the intended workflow.
-3. Read [Financial model](docs/FINANCIAL_MODEL.md) for assumptions, formulas, and worked examples.
-4. Review [Decisions and open questions](docs/DECISIONS.md) before authorizing implementation.
+1. [Current status and handoff](docs/STATUS.md)
+2. [Product specification](docs/PRODUCT_SPEC.md)
+3. [Financial model](docs/FINANCIAL_MODEL.md)
+4. [Decisions and history](docs/DECISIONS.md)
 
-[AGENTS.md](AGENTS.md) gives future development agents the project rules.
-When switching sessions, give the next session access to the latest repository
-files and ask it to read these instructions and the status document. Update status
-and decisions before handing off; commit and push updates when authorized.
+[AGENTS.md](AGENTS.md) supplies Codex working instructions. Read these files instead
+of relying on another chat's memory. Keep the calculation engine separate from
+the UI so Advanced features can be added later.
 
-The proposed first version handles multiple holdings, partial sales, multiple
-replacement investments, long-term gains assumptions, and bear/base/bull comparisons.
-It reports after-tax outcomes and an equivalent break-even replacement return.
-Optional user-assigned scenario weights give a conditional probability of
-outperforming; Monte Carlo and confidence intervals are planned for later.
-
-Review the proposed tax context, final-liquidation convention, price-only returns,
-and loss treatment first. After approval, the next development step is to choose
-the stack and build a tested calculation engine, followed by a simple interface.
+The financial model documents explicit simplifications, including a traded-slice
+comparison, taxes reserved from proceeds, and hypothetical final liquidation.
+These are calculation conventions, not a complete tax-return model.
 
 Repository: [ebarkoch/financial_optimizer](https://github.com/ebarkoch/financial_optimizer).
-The local folder was empty and was not a Git checkout at initial inspection on
-October 4, 2026. It is now connected to the repository; this initial snapshot
-contains the project documents and a macOS `.gitignore`.
-The repository is public: use synthetic examples and keep real financial data out
-of source control.
+The known Mac checkout is `/Users/eyal/Desktop/financial_optimizer`; the October 10
+update targets GitHub and does not establish whether that checkout is synchronized.
+The repository is public: use synthetic examples, never personal financial data.
